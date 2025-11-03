@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import 'data/habit_repository.dart';
 import 'data/habit_store.dart';
@@ -18,7 +19,9 @@ void main() async {
     TargetPlatform.macOS,
   };
 
-  if (!kIsWeb && desktopPlatforms.contains(defaultTargetPlatform)) {
+  if (kIsWeb) {
+    sqflite.databaseFactory = databaseFactoryFfiWeb;
+  } else if (desktopPlatforms.contains(defaultTargetPlatform)) {
     sqfliteFfiInit();
     sqflite.databaseFactory = databaseFactoryFfi;
   }
